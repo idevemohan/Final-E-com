@@ -41,9 +41,8 @@ function CartModal({ open, onClose }) {
                 className="inline-flex w-full items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-base font-medium text-white hover:bg-emerald-700 disabled:opacity-50"
                 disabled={items.length === 0}
                 onClick={() => {
-                  alert('Checkout (demo)')
-                  clearCart()
                   onClose()
+                  window.dispatchEvent(new CustomEvent('open-checkout'))
                 }}
               >
                 Checkout

@@ -9,6 +9,7 @@ import RegisterModal from './components/RegisterModal.jsx'
 import Footer from './components/Footer.jsx'
 import { CartProvider, useCart } from './context/CartContext.jsx'
 import CartModal from './components/CartModal.jsx'
+import CheckoutModal from './components/CheckoutModal.jsx'
 import api from './lib/api.js'
 
 const ALL_PRODUCTS = [
@@ -33,6 +34,7 @@ function AppContent() {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [registerEmail, setRegisterEmail] = useState('')
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
   const { totalItems } = useCart()
   const [remoteProducts, setRemoteProducts] = useState(null)
   const filteredProducts = useMemo(() => {
@@ -94,6 +96,15 @@ function AppContent() {
     window.addEventListener('perform-search', onPerformSearch)
     return () => window.removeEventListener('perform-search', onPerformSearch)
   }, [])
+
+  useEffect(() => {
+    function onOpenCheckout() {
+      setIsCheckoutOpen(true)
+    }
+    window.addEventListener('open-checkout', onOpenCheckout)
+    return () => window.removeEventListener('open-checkout', onOpenCheckout)
+  }, [])
+
   useEffect(() => {
     function onOpenRegister(e) {
       setRegisterEmail(e.detail || '')
@@ -103,6 +114,7 @@ function AppContent() {
     window.addEventListener('auth-open-register', onOpenRegister)
     return () => window.removeEventListener('auth-open-register', onOpenRegister)
   }, [])
+
   function handleSelectCategory(c) {
     setCategory(c)
     setSearchQuery('')
@@ -158,6 +170,7 @@ function AppContent() {
       <SignInModal open={isSignInOpen} onClose={() => setIsSignInOpen(false)} />
       <RegisterModal open={isRegisterOpen} onClose={() => setIsRegisterOpen(false)} initialEmail={registerEmail} />
       <CartModal open={isCartOpen} onClose={() => setIsCartOpen(false)} />
+      <CheckoutModal open={isCheckoutOpen} onClose={() => setIsCheckoutOpen(false)} />
       <Footer />
     </>
   )
